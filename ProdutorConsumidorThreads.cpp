@@ -55,7 +55,7 @@ void produtora() {
         // Simula waitForEvent() (I/O BOUND)
         this_thread::sleep_for(chrono::milliseconds(10));
         int produced_item = ++item_counter;
-
+ 
         // 1. Espera por Espaço (spaces.wait())
         spaces.wait(); 
 
