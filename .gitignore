@@ -1,0 +1,10 @@
+# Virtual environment
+venv/
+
+# Build files
+*.exe
+*.o
+*.out
+
+# Buffer results
+buffer_*.csv
