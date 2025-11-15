@@ -1,6 +1,7 @@
 import asyncio
 import time
 import matplotlib.pyplot as plt
+import csv
 
 # =============================
 # Simulador Produtor-Consumidor
@@ -77,6 +78,16 @@ async def run_simulation(buffer_size, num_produtores=2, itens_produtor=15, num_c
 
     return await main()
 
+# função para salvar as saídas do programa
+def salvar_csv(buffer_size, tempo_log, buffer_log):
+    filename = f"buffer_{buffer_size}.csv"
+    with open(filename, "w", newline="") as f:
+        writer = csv.writer(f)
+        writer.writerow(["tempo", "buffer"])
+        for t, b in zip(tempo_log, buffer_log):
+            writer.writerow([t, b])
+    print(f"> CSV salvo como: {filename}")
+
 
 # ==========================
 # Execução dos 3 experimentos
@@ -87,6 +98,9 @@ resultados = {}
 for buffer_size in [5, 50, 100]:
     print(f"\n=== Executando simulação (buffer={buffer_size}) ===")
     tempo_total, tempo_log, buffer_log = asyncio.run(run_simulation(buffer_size))
+
+    salvar_csv(buffer_size, tempo_log, buffer_log)
+
     resultados[buffer_size] = (tempo_total, tempo_log, buffer_log)
     print(f"Tempo total (buffer={buffer_size}) = {tempo_total:.2f} s")
 
