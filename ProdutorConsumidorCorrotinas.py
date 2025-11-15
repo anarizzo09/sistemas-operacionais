@@ -7,7 +7,7 @@ import csv
 # Simulador Produtor-Consumidor
 # =============================
 
-async def run_simulation(buffer_size, num_produtores=2, itens_produtor=25, num_consumidores=3):
+async def run_simulation(buffer_size, num_produtores=1, itens_produtor=50, num_consumidores=1):
     fila = asyncio.Queue(maxsize=buffer_size) # fila compartilhada
     buffer_log = []     # tamanho do buffer ao longo do tempo
     tempo_log = []      # timestamp relativo ao início
@@ -29,7 +29,7 @@ async def run_simulation(buffer_size, num_produtores=2, itens_produtor=25, num_c
             while True:
                 item = await fila.get()
                 print(f"[Consumidor {consumidorID}] pegou {item} | Buffer: {fila.qsize()}/{buffer_size}")
-                await asyncio.sleep(0.002) # simula o tempo de consumo (pausa cooperativa)
+                await asyncio.sleep(0.02) # simula o tempo de consumo (pausa cooperativa)
                 fila.task_done() # sinaliza que o item foi processado
                 print(f"[Consumidor {consumidorID}] consumiu {item}")
         except asyncio.CancelledError:
