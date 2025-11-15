@@ -15,5 +15,5 @@ O problema Produtor-Consumidor foi implementado de duas formas distintas para pe
     * **Conceito:** Utiliza Threads, onde o Sistema Operacional gerencia a troca de contexto e o escalonamento das tarefas.
 
 2.  **Sincronização Cooperativa (Corrotinas)**
-    * **Linguagem:** C
+    * **Linguagem:** Python
     * **Conceito:** Utiliza Corrotinas, onde as próprias tarefas devem ceder voluntariamente o controle para permitir a execução de outras.
