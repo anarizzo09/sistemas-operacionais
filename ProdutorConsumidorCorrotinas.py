@@ -29,7 +29,7 @@ async def run_simulation(buffer_size, num_produtores=2, itens_produtor=25, num_c
             while True:
                 item = await fila.get()
                 print(f"[Consumidor {consumidorID}] pegou {item} | Buffer: {fila.qsize()}/{buffer_size}")
-                await asyncio.sleep(0.001) # simula o tempo de consumo (pausa cooperativa)
+                await asyncio.sleep(0.002) # simula o tempo de consumo (pausa cooperativa)
                 fila.task_done() # sinaliza que o item foi processado
                 print(f"[Consumidor {consumidorID}] consumiu {item}")
         except asyncio.CancelledError:
@@ -43,7 +43,7 @@ async def run_simulation(buffer_size, num_produtores=2, itens_produtor=25, num_c
                 buffer_log.append(fila.qsize())
                 tempo_log.append(time.time() - inicio)
                 print(f"[MONITOR] Buffer: {fila.qsize()}/{buffer_size}")
-                await asyncio.sleep(0.001) # verifica a cada 0.1 segundos
+                await asyncio.sleep(0.001) # verifica a cada 0.1 millisegundo
         except asyncio.CancelledError:
             print("[MONITOR] Encerrado.")
             raise
