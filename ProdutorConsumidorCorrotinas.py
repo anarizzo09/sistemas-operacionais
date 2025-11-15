@@ -18,7 +18,7 @@ async def run_simulation(buffer_size, num_produtores=2, itens_produtor=15, num_c
     async def produtora(produtorID):
         for i in range(itens_produtor):
             item = f"item-{produtorID}-{i}"
-            await asyncio.sleep(10) # simula tempo de produção (pausa cooperativa)
+            await asyncio.sleep(0.5) # simula tempo de produção (pausa cooperativa)
             await fila.put(item)
             print(f"[Produtor {produtorID}] produziu {item} | Buffer: {fila.qsize()}/{buffer_size}")
         print(f"[Produtor {produtorID}] terminou.")
@@ -29,7 +29,7 @@ async def run_simulation(buffer_size, num_produtores=2, itens_produtor=15, num_c
             while True:
                 item = await fila.get()
                 print(f"[Consumidor {consumidorID}] pegou {item} | Buffer: {fila.qsize()}/{buffer_size}")
-                await asyncio.sleep(20) # simula o tempo de consumo (pausa cooperativa)
+                await asyncio.sleep(0.5) # simula o tempo de consumo (pausa cooperativa)
                 fila.task_done() # sinaliza que o item foi processado
                 print(f"[Consumidor {consumidorID}] consumiu {item}")
         except asyncio.CancelledError:
@@ -43,7 +43,7 @@ async def run_simulation(buffer_size, num_produtores=2, itens_produtor=15, num_c
                 buffer_log.append(fila.qsize())
                 tempo_log.append(time.time() - inicio)
                 print(f"[MONITOR] Buffer: {fila.qsize()}/{buffer_size}")
-                await asyncio.sleep(5) # verifica a cada 5 segundos
+                await asyncio.sleep(0.5) # verifica a cada 0.5 segundos
         except asyncio.CancelledError:
             print("[MONITOR] Encerrado.")
             raise
@@ -102,7 +102,7 @@ for buffer_size in [5, 50, 100]:
     salvar_csv(buffer_size, tempo_log, buffer_log)
 
     resultados[buffer_size] = (tempo_total, tempo_log, buffer_log)
-    print(f"Tempo total (buffer={buffer_size}) = {tempo_total:.2f} s")
+    print(f"Tempo total (buffer={buffer_size}) = {tempo_total:.5f} s")
 
 
 # ==========================
@@ -125,4 +125,5 @@ plt.show()
 # Resumo final
 print("\nResumo dos tempos totais:")
 for b, (tempo_total, _, _) in resultados.items():
-    print(f"Buffer {b}: {tempo_total:.2f} s")
+    print(f"Buffer {b}: {tempo_total:.5f} s ({tempo_total * 1000:.2f} ms)")
+
