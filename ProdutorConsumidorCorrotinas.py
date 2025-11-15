@@ -7,7 +7,7 @@ import csv
 # Simulador Produtor-Consumidor
 # =============================
 
-async def run_simulation(buffer_size, num_produtores=2, itens_produtor=15, num_consumidores=3):
+async def run_simulation(buffer_size, num_produtores=2, itens_produtor=25, num_consumidores=3):
     fila = asyncio.Queue(maxsize=buffer_size) # fila compartilhada
     buffer_log = []     # tamanho do buffer ao longo do tempo
     tempo_log = []      # timestamp relativo ao início
@@ -18,7 +18,7 @@ async def run_simulation(buffer_size, num_produtores=2, itens_produtor=15, num_c
     async def produtora(produtorID):
         for i in range(itens_produtor):
             item = f"item-{produtorID}-{i}"
-            await asyncio.sleep(0.5) # simula tempo de produção (pausa cooperativa)
+            await asyncio.sleep(0.001) # simula tempo de produção (pausa cooperativa)
             await fila.put(item)
             print(f"[Produtor {produtorID}] produziu {item} | Buffer: {fila.qsize()}/{buffer_size}")
         print(f"[Produtor {produtorID}] terminou.")
@@ -29,7 +29,7 @@ async def run_simulation(buffer_size, num_produtores=2, itens_produtor=15, num_c
             while True:
                 item = await fila.get()
                 print(f"[Consumidor {consumidorID}] pegou {item} | Buffer: {fila.qsize()}/{buffer_size}")
-                await asyncio.sleep(0.5) # simula o tempo de consumo (pausa cooperativa)
+                await asyncio.sleep(0.001) # simula o tempo de consumo (pausa cooperativa)
                 fila.task_done() # sinaliza que o item foi processado
                 print(f"[Consumidor {consumidorID}] consumiu {item}")
         except asyncio.CancelledError:
@@ -43,7 +43,7 @@ async def run_simulation(buffer_size, num_produtores=2, itens_produtor=15, num_c
                 buffer_log.append(fila.qsize())
                 tempo_log.append(time.time() - inicio)
                 print(f"[MONITOR] Buffer: {fila.qsize()}/{buffer_size}")
-                await asyncio.sleep(0.5) # verifica a cada 0.5 segundos
+                await asyncio.sleep(0.001) # verifica a cada 0.1 segundos
         except asyncio.CancelledError:
             print("[MONITOR] Encerrado.")
             raise
